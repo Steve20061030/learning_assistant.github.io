@@ -1,0 +1,853 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>个性化学习助手 - 课程详情</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Noto+Sans+SC:wght@300;400;500;700&display=swap');
+        
+        *{box-sizing:border-box;margin:0;padding:0;}
+        
+        body{
+            background:linear-gradient(135deg,#0a0e18 0%,#0f1623 40%,#111a28 100%);
+            color:#d0e0f0;
+            font-family:'Noto Sans SC','Segoe UI',sans-serif;
+            min-height:100vh;
+            overflow-x:hidden;
+        }
+        
+        body::before{
+            content:'';
+            position:fixed;
+            inset:0;
+            background:
+                radial-gradient(circle at 20% 20%,rgba(0,100,180,0.08),transparent 40%),
+                radial-gradient(circle at 80% 80%,rgba(100,140,200,0.06),transparent 45%),
+                repeating-linear-gradient(0deg,rgba(0,60,120,0.02) 0,rgba(0,60,120,0.02) 1px,transparent 1px,transparent 6px);
+            pointer-events:none;
+            z-index:0;
+        }
+        
+        .container{
+            position:relative;
+            z-index:1;
+            max-width:1200px;
+            margin:0 auto;
+            padding:24px;
+        }
+        
+        .header{
+            display:flex;
+            justify-content:space-between;
+            align-items:center;
+            padding:12px 24px;
+            border-bottom:1px solid rgba(80,120,180,0.3);
+            margin-bottom:24px;
+            position:sticky;
+            top:0;
+            z-index:100;
+            backdrop-filter:blur(12px);
+            background:rgba(8,12,20,0.82);
+        }
+        
+        .prts-title{
+            font-family:'Orbitron',monospace;
+            font-size:18px;
+            font-weight:700;
+            letter-spacing:3px;
+            color:#b0d0f0;
+        }
+        
+        .status-line{
+            font-family:'Orbitron',monospace;
+            font-size:11px;
+            color:rgba(140,180,220,0.7);
+            display:flex;
+            gap:16px;
+        }
+        
+        .panel-box{
+            background:linear-gradient(180deg,rgba(15,25,45,0.9),rgba(10,18,32,0.95));
+            border:1px solid rgba(80,120,180,0.3);
+            border-radius:3px;
+            overflow:hidden;
+            box-shadow:0 0 25px rgba(0,0,0,0.45),inset 0 0 40px rgba(20,60,120,0.06);
+            margin-bottom:24px;
+        }
+        
+        .panel-head{
+            padding:12px 16px;
+            background:linear-gradient(90deg,rgba(30,70,130,0.5),rgba(20,50,90,0.2));
+            border-bottom:1px solid rgba(80,120,180,0.3);
+            display:flex;
+            align-items:center;
+            gap:10px;
+        }
+        
+        .panel-icon-box{
+            width:22px;height:22px;border:1px solid rgba(120,160,220,0.5);
+            display:flex;align-items:center;justify-content:center;font-size:12px;
+            color:#90b0d0;
+        }
+        
+        .panel-name{
+            font-weight:600;font-size:14px;letter-spacing:1px;color:#c8d8e8;
+        }
+        
+        .panel-body{
+            padding:20px;
+        }
+        
+        .course-header{
+            margin-bottom:24px;
+        }
+        
+        .course-title{
+            font-size:24px;
+            font-weight:700;
+            color:#c8d8e8;
+            margin-bottom:12px;
+        }
+        
+        .course-desc{
+            font-size:14px;
+            line-height:1.6;
+            color:#a0c0e0;
+            margin-bottom:16px;
+        }
+        
+        .course-meta{
+            display:flex;
+            gap:24px;
+            margin-bottom:20px;
+            font-size:13px;
+            color:rgba(140,180,220,0.8);
+        }
+        
+        .doc-category{
+            margin:20px 0;
+            padding:16px;
+            border:1px solid rgba(80,120,180,0.3);
+            border-radius:3px;
+            background:rgba(10,30,60,0.3);
+        }
+        
+        .doc-category-title{
+            font-weight:700;
+            color:#c8d8e8;
+            margin-bottom:12px;
+            font-size:16px;
+        }
+        
+        .doc-list{
+            display:grid;
+            grid-template-columns:repeat(auto-fill, minmax(300px, 1fr));
+            gap:12px;
+        }
+        
+        .doc-card{
+            padding:12px;
+            border:1px solid rgba(80,120,180,0.4);
+            border-radius:3px;
+            background:rgba(15,30,50,0.5);
+            transition:all 0.2s ease;
+            cursor:pointer;
+        }
+        
+        .doc-card:hover{
+            border-color:rgba(120,160,220,0.8);
+            background:rgba(20,40,70,0.6);
+            transform:translateY(-2px);
+        }
+        
+        .doc-icon{
+            width:24px;
+            height:24px;
+            border:1px solid rgba(100,140,180,0.5);
+            display:flex;
+            align-items:center;
+            justify-content:center;
+            font-size:12px;
+            color:#90b0d0;
+            margin-bottom:8px;
+        }
+        
+        .doc-name{
+            font-weight:600;
+            color:#d8e4f0;
+            margin-bottom:6px;
+            font-size:14px;
+        }
+        
+        .doc-size{
+            font-size:12px;
+            color:rgba(140,180,220,0.6);
+        }
+        
+        .btn{
+            background:linear-gradient(180deg,rgba(40,80,140,0.7),rgba(20,50,100,0.8));
+            border:1px solid rgba(100,140,200,0.4);
+            color:#d0e0f0;
+            padding:10px 16px;
+            border-radius:2px;
+            cursor:pointer;
+            font-weight:600;
+            letter-spacing:1px;
+            transition:all 0.2s ease;
+        }
+        
+        .btn:hover{
+            transform:translateY(-1px);
+            box-shadow:0 8px 18px rgba(0,100,200,0.2);
+        }
+        
+        .btn-main{
+            background:linear-gradient(180deg,rgba(60,140,220,0.85),rgba(30,90,170,0.9));
+            border-color:rgba(100,170,240,0.7);
+        }
+        
+        .back-btn{
+            margin-bottom:20px;
+        }
+        
+        .activity-waiting{
+            color:rgba(100,140,180,0.55);
+            text-align:center;
+            padding:60px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <div class="prts-title">PRTS 学习终端</div>
+            <div class="status-line">
+                <span>STATUS: ONLINE</span>
+                <span id="statusTime">--:--:--</span>
+            </div>
+        </header>
+
+        <div class="panel-box">
+            <div class="panel-head">
+                <div class="panel-icon-box">▣</div>
+                <h2 class="panel-name">课程资料</h2>
+            </div>
+            <div class="panel-body" id="courseContent">
+                <div class="activity-waiting"><p>加载中...</p></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 课程数据
+        const courseData=[
+            {cid:'ai_math',title:'人工智能数学思维',topics:['课程概述','发展现状','智能简史','机器学习','DNN深度网络','卷积神经网络'],desc:'基于"人工智能数学思维课件"和"人工智能的数学思维"文件夹资料'},
+            {cid:'data_struct',title:'数据结构与算法',topics:['C++基础','栈与队列','链表','树与图','查找与排序','哈希表'],desc:'基于"王丽萍数据结构与算法"和"数据结构与算法"文件夹资料'},
+            {cid:'discrete_math',title:'离散数学',topics:['命题逻辑','集合与关系','图论','树','组合数学'],desc:'基于"离散数学"文件夹资料'},
+            {cid:'comp_systems',title:'计算机系统',topics:['信息表示','浮点数','机器指令','内存层次','链接','异常与信号'],desc:'基于"计算机系统"文件夹资料'},
+            {cid:'algorithms',title:'算法设计与分析',topics:['排序算法','搜索算法','动态规划','贪心算法','时间复杂度'],desc:'基于相关算法资料'}
+        ];
+
+        // 资料数据
+        const docsData={
+            ai_math:{
+                categories:[
+                    {title:'PPT课件',docs:[
+                        {name:'1 人工智能的数学思维-课程概述v2025.pdf',size:'2.5MB'},
+                        {name:'2.2 人工智能的数学思维-引言-发展现状概述v6.pdf',size:'3.1MB'},
+                        {name:'3.1 智能简史-简明数学史v10.pdf',size:'2.8MB'},
+                        {name:'4.1 机器学习v3.3.pdf',size:'4.2MB'}
+                    ]},
+                    {title:'作业与练习',docs:[
+                        {name:'人工智能数学思维作业.docx',size:'1.2MB'},
+                        {name:'知识点总结.docx',size:'0.8MB'}
+                    ]}
+                ]
+            },
+            data_struct:{
+                categories:[
+                    {title:'代码示例',docs:[
+                        {name:'Chapter02 STL介绍.doc',size:'1.5MB'},
+                        {name:'Chapter05 递归与分治',size:'0.9MB'},
+                        {name:'Chapter06 链表实现',size:'1.1MB'}
+                    ]},
+                    {title:'教学课件',docs:[
+                        {name:'数据结构与程序设计1.ppt',size:'2.3MB'},
+                        {name:'数据结构与程序设计3.ppt',size:'2.7MB'}
+                    ]}
+                ]
+            },
+            discrete_math:{
+                categories:[
+                    {title:'PPT课件',docs:[
+                        {name:'Chapter01 命题逻辑.ppt',size:'1.9MB'},
+                        {name:'Chapter06 关系与函数.ppt',size:'2.2MB'},
+                        {name:'Chapter09 图论基础.ppt',size:'2.5MB'}
+                    ]},
+                    {title:'参考资料',docs:[
+                        {name:'奇数题解答.pdf',size:'1.3MB'},
+                        {name:'组合数学练习题集.pdf',size:'1.7MB'}
+                    ]}
+                ]
+            },
+            comp_systems:{
+                categories:[
+                    {title:'课程讲义',docs:[
+                        {name:'1 信息表示与存储.pdf',size:'2.1MB'},
+                        {name:'6 内存层次结构.pdf',size:'2.4MB'},
+                        {name:'8 链接.pdf',size:'1.8MB'}
+                    ]},
+                    {title:'实验资料',docs:[
+                        {name:'Lab01 Linux环境.pdf',size:'1.6MB'},
+                        {name:'Lab03 Bomb Lab',size:'1.2MB'}
+                    ]}
+                ]
+            },
+            algorithms:{
+                categories:[
+                    {title:'算法讲义',docs:[
+                        {name:'排序算法综述.pdf',size:'2.0MB'},
+                        {name:'动态规划专题.pdf',size:'2.6MB'},
+                        {name:'贪心算法分析.pdf',size:'1.9MB'}
+                    ]},
+                    {title:'练习题',docs:[
+                        {name:'时间复杂度练习题.docx',size:'1.1MB'},
+                        {name:'算法设计题目集.pdf',size:'1.5MB'}
+                    ]}
+                ]
+            }
+        };
+
+        function updateTime(){
+            const now=new Date();
+            const h=String(now.getHours()).padStart(2,'0');
+            const m=String(now.getMinutes()).padStart(2,'0');
+            const s=String(now.getSeconds()).padStart(2,'0');
+            document.getElementById('statusTime').textContent=`${h}:${m}:${s}`;
+        }
+        setInterval(updateTime,1000);
+        updateTime();
+
+        // 推荐的学习文档列表
+        const recommendedDocs = [
+            '1人工智能的数学思维-课程概述v2025.pdf',
+            '4.1机器学习.v3.3.pdf',
+            '数据结构电子书.pdf',
+            'Ch1.1-1.3.ppt',
+            'RosenIRG_Chap01.pdf',
+            '0.课程简介.pdf',
+            '1.信息表示与存储.pdf'
+        ];
+        
+        function renderFileStructure(structure, level = 0){
+            let html = '';
+            const indent = '&nbsp;&nbsp;&nbsp;&nbsp;'.repeat(level);
+            
+            try {
+                for (const [name, content] of Object.entries(structure)) {
+                    if (Array.isArray(content)) {
+                        // 文件夹
+                        html += `<div style="margin:4px 0;">
+                            <strong style="color:#c8d8e8;">${indent}📁 ${name}</strong>
+                            <div style="margin-left:20px;">
+                                ${content.map(file => {
+                                    const isRecommended = recommendedDocs.includes(file);
+                                    const star = isRecommended ? '<span style="color:#ffd700;margin-right:4px;">⭐</span>' : '';
+                                    const basePath = 'C:\\Users\\Steve\\Desktop\\日常文件\\大一下（一）';
+                                    let filePath = basePath;
+                                    
+                                    // 构建跨设备兼容的相对路径
+                                    let foundPath = null;
+                                    let fileUrl = '';
+                                    
+                                    // 实际文件夹映射
+                                    const actualFolders = {
+                                        '人工智能数学思维': ['人工智能数学思维课件', '人工智能的数学思维'],
+                                        '数据结构与算法': ['数据结构与算法', '王丽i萍 数据结构与算法'],
+                                        '离散数学': ['离散数学'],
+                                        '计算机系统': ['计算机系统']
+                                    };
+                                    
+                                    // 尝试在实际文件夹中找到文件
+                                    for (const [course, folders] of Object.entries(actualFolders)) {
+                                        for (const folder of folders) {
+                                            // 使用跨设备兼容的相对路径
+                                            const relativePath = `../../${folder}/${file}`;
+                                            foundPath = relativePath;
+                                            fileUrl = relativePath;
+                                            break;
+                                        }
+                                        if (foundPath) break;
+                                    }
+                                    
+                                    // 如果还是没找到，尝试直接在根目录查找
+                                    if (!foundPath) {
+                                        foundPath = `../../${file}`;
+                                        fileUrl = `../../${file}`;
+                                    }
+                                    
+                                    return `
+                                        <div style="margin:4px 0;">
+                                            <span style="color:#a0c0e0;">
+                                                ${indent}&nbsp;&nbsp;&nbsp;&nbsp;${star}📄 
+                                                <a href="${fileUrl}" target="_blank" style="color:#60a0f0;text-decoration:underline;">${file}</a>
+                                            </span>
+                                            ${isRecommended ? '<span style="color:#ffd700;font-size:12px;margin-left:4px;">(推荐)</span>' : ''}
+                                            <br>
+                                            <span style="color:#6080a0;font-size:11px;">${indent}&nbsp;&nbsp;&nbsp;&nbsp;路径: ${foundPath || '未找到'}</span>
+                                            <br>
+                                            <span style="color:#6080a0;font-size:11px;">${indent}&nbsp;&nbsp;&nbsp;&nbsp;链接: ${fileUrl || '未生成'}</span>
+                                        </div>
+                                    `;
+                                }).join('')}
+                            </div>
+                        </div>`;
+                    } else if (typeof content === 'object') {
+                        // 嵌套文件夹
+                        html += `<div style="margin:4px 0;">
+                            <strong style="color:#c8d8e8;">${indent}📁 ${name}</strong>
+                            <div style="margin-left:20px;">
+                                ${renderFileStructure(content, level + 1)}
+                            </div>
+                        </div>`;
+                    } else {
+                        // 单个文件
+                        const isRecommended = recommendedDocs.includes(name);
+                        const star = isRecommended ? '<span style="color:#ffd700;margin-right:4px;">⭐</span>' : '';
+                        const basePath = 'C:\\Users\\Steve\\Desktop\\日常文件\\大一下（一）';
+                        const fileUrl = `file:///${(basePath + '\\' + name).replace(/\\/g, '/')}`;
+                        
+                        html += `<div style="margin:4px 0;">
+                            <span style="color:#a0c0e0;">
+                                ${indent}${star}📄 
+                                <a href="${fileUrl}" target="_blank" style="color:#60a0f0;text-decoration:underline;">${name}</a>
+                            </span>
+                            ${isRecommended ? '<span style="color:#ffd700;font-size:12px;margin-left:4px;">(推荐)</span>' : ''}
+                        </div>`;
+                    }
+                }
+            } catch (error) {
+                console.error('渲染文件结构错误:', error);
+                html = '<p style="color:#ff6060;">文件结构渲染错误</p>';
+            }
+            
+            return html;
+        }
+
+        function loadCourseDetails(){
+            try {
+                console.log('加载课程详情...');
+                // 从URL参数中读取课程ID
+                const urlParams = new URLSearchParams(window.location.search);
+                const courseId = urlParams.get('cid') || localStorage.getItem('currentCourseId');
+                console.log('课程ID:', courseId);
+                
+                if (!courseId) {
+                    document.getElementById('courseContent').innerHTML = `
+                        <div class="activity-waiting"><p>未找到课程信息</p></div>
+                    `;
+                    return;
+                }
+
+                const course = courseData.find(c => c.cid === courseId);
+                const courseDocs = docsData[courseId];
+                console.log('课程:', course);
+                console.log('课程资料:', courseDocs);
+
+                if (!course) {
+                    document.getElementById('courseContent').innerHTML = `
+                        <div class="activity-waiting"><p>课程不存在</p></div>
+                    `;
+                    return;
+                }
+
+                // 生成文件结构HTML
+                const fileStructureHtml = renderFileStructure(realFileStructure);
+                console.log('文件结构HTML生成成功');
+
+                document.getElementById('courseContent').innerHTML = `
+                    <button class="btn back-btn" onclick="window.close()">← 返回终端</button>
+                    
+                    <div class="course-header">
+                        <h1 class="course-title">${course.title}</h1>
+                        <p class="course-desc">${course.desc}</p>
+                        <div class="course-meta">
+                            <span>主题数量: ${course.topics.length}</span>
+                            <span>资料分类: ${courseDocs.categories.length}</span>
+                            <span>资料总数: ${courseDocs.categories.reduce((sum, cat) => sum + cat.docs.length, 0)}</span>
+                        </div>
+                    </div>
+
+                    <div style="margin:24px 0;">
+                        <h3 class="doc-category-title">▸ 真实文件浏览器</h3>
+                        <div style="padding:16px;background:rgba(10,30,60,0.3);border:1px solid rgba(80,120,180,0.3);border-radius:3px;">
+                            <p style="color:#a0c0e0;margin-bottom:12px;">浏览个性化学习助手同级文件夹中的真实文件：</p>
+                            ${fileStructureHtml}
+                        </div>
+                    </div>
+
+                    <!-- 添加锚点区域 -->
+                    <div id="math-resources" style="display:none;"></div>
+                    <div id="math-exercises" style="display:none;"></div>
+                    <div id="ml-intro" style="display:none;"></div>
+                    <div id="ml-projects" style="display:none;"></div>
+                    <div id="nn-basics" style="display:none;"></div>
+                    <div id="tf-tutorial" style="display:none;"></div>
+                    <div id="ds-tutorial" style="display:none;"></div>
+                    <div id="ds-code" style="display:none;"></div>
+                    <div id="algo-detail" style="display:none;"></div>
+                    <div id="algo-complexity" style="display:none;"></div>
+                    <div id="dm-notes" style="display:none;"></div>
+                    <div id="dm-proofs" style="display:none;"></div>
+                    <div id="cs-intro" style="display:none;"></div>
+                    <div id="cs-lab" style="display:none;"></div>
+                    <div id="study-plan" style="display:none;"></div>
+                    <div id="study-community" style="display:none;"></div>
+                    <div id="online-tutorials" style="display:none;"></div>
+                    
+                    ${courseDocs.categories.map(cat => {
+                        // 根据分类标题生成锚点ID
+                        const anchorId = cat.title.includes('PPT') ? 'ppt-resources' :
+                                        cat.title.includes('作业') ? 'homework-exercises' :
+                                        cat.title.includes('代码') ? 'code-examples' :
+                                        'docs-content';
+                        return `
+                        <div class="doc-category" id="${anchorId}">
+                            <h3 class="doc-category-title">▸ ${cat.title}</h3>
+                            <div class="doc-list">
+                                ${cat.docs.map(doc => `
+                                    <div class="doc-card" onclick="openDocument('${doc.name}')">
+                                        <div class="doc-icon">${getFileIcon(doc.name)}</div>
+                                        <div class="doc-name">${doc.name}</div>
+                                        <div class="doc-size">${doc.size}</div>
+                                    </div>
+                                `).join('')}
+                            </div>
+                        </div>
+                        `;
+                    }).join('')}
+                `;
+                
+                console.log('页面加载完成');
+            } catch (error) {
+                console.error('加载错误:', error);
+                document.getElementById('courseContent').innerHTML = `
+                    <div class="activity-waiting"><p>加载出错: ${error.message}</p></div>
+                `;
+            }
+        }
+
+        function getFileIcon(filename){
+            if(filename.endsWith('.pdf')) return 'P';
+            if(filename.endsWith('.doc') || filename.endsWith('.docx')) return 'W';
+            if(filename.endsWith('.ppt') || filename.endsWith('.pptx')) return 'S';
+            return 'F';
+        }
+
+        // 重新整理的文件系统结构
+        const realFileStructure = {
+            '📚 课程资料': {
+                '人工智能数学思维': {
+                    '课件': [
+                        '1人工智能的数学思维-课程概述v2025.pdf',
+                        '2.2人工智能的数学思维-引言-人工智能发展现状概述.v6.pdf',
+                        '3.1人工智能的数学思维-智能简史.简明数学史v10.pdf',
+                        '4.1机器学习.v3.3.pdf',
+                        '4.2机器学习之DNN.v5.pdf',
+                        '4.3机器学习-卷积.v3.3.pdf'
+                    ],
+                    '作业与练习': [
+                        '人工智能数学思维作业.docx',
+                        '知识点总结.docx',
+                        'review.docx'
+                    ],
+                    'wx PPT 课件': [
+                        '第1周---人工智能的数学思维 (2) 1.pdf',
+                        '第3周---Neural Network.pdf',
+                        '第4周---深度学习基础.pdf',
+                        '第4周---深度学习应用.pdf',
+                        '第7周 几何思维--ECNU.pdf'
+                    ],
+                    'wx两次作业': [
+                        '10235101421唐愉婷人工智能实验一.docx',
+                        '10235101421唐愉婷人工智能实验二.docx'
+                    ]
+                },
+                '数据结构与算法': {
+                    '课件': [
+                        '数据结构电子书.pdf'
+                    ],
+                    '上机资料': [
+                        '数据结构 上机.docx',
+                        '注意！.txt'
+                    ],
+                    'wlp课件': [
+                        'Chapter01 (4).rar',
+                        'Chapter04 2.rar',
+                        'Chapter04.rar',
+                        'Chapter05.rar',
+                        'Chapter06.rar',
+                        'Chapter07.rar',
+                        'Chapter08.rar',
+                        'Chapter09.rar',
+                        'Chapter10.rar',
+                        'Chapter11 2.rar',
+                        'Chapter12 2.rar',
+                        'chapter02.rar'
+                    ],
+                    'STL资料': [
+                        'STL介绍.doc'
+                    ]
+                },
+                '离散数学': {
+                    '课件': [
+                        'Ch1.1-1.3.ppt',
+                        'Ch1.4.ppt'
+                    ],
+                    '教材配套': [
+                        'RosenIRG_Chap01.pdf',
+                        'RosenIRG_Chap02.pdf',
+                        'RosenIRG_Chap03.pdf',
+                        'RosenIRG_Chap04.pdf',
+                        'RosenIRG_Chap05.pdf',
+                        'RosenIRG_Chap06.pdf',
+                        'RosenIRG_Chap07.pdf',
+                        'RosenIRG_Chap08.pdf',
+                        'RosenIRG_Chap09.pdf',
+                        'RosenIRG_Chap10.pdf',
+                        'RosenIRG_Chap11.pdf',
+                        'RosenIRG_Chap12.pdf',
+                        'RosenIRG_Chap13.pdf'
+                    ],
+                    '习题答案': [
+                        '奇数题.pdf',
+                        '奇数题偶数题答案.zip'
+                    ]
+                },
+                '计算机系统': {
+                    '课件': [
+                        '0.课程简介.pdf',
+                        '1.信息表示与存储.pdf',
+                        '2.浮点数.pdf',
+                        '3.machine_basics.pdf',
+                        '4.machine_contd.pdf',
+                        '5.machine_final.pdf',
+                        '6.memory_hier.pdf',
+                        '7.memory_hier_contd.pdf',
+                        '8.linking.pdf',
+                        '9.ecf_1.pdf',
+                        '10-optimization.pptx',
+                        '11.vm.pdf'
+                    ],
+                    '实验指导': [
+                        'Lab.1.Linux环境.pdf',
+                        'lab.3.bomb.pdf',
+                        'lab_4_rec7_ohg.pdf'
+                    ],
+                    '作业': [
+                        '10235101424-陈宇锋-计算机系统-lab2.doc',
+                        '10235101424-陈宇锋-计算机系统-lab3.docx',
+                        '10235101424-陈宇锋-计算机系统-lab4 .doc',
+                        '10235101424-陈宇锋-计算机系统-lab5.docx.doc'
+                    ]
+                }
+            },
+            '📝 其他资料': {
+                '听力PRE': [
+                    'PPT.pptx',
+                    '报告.docx',
+                    '讲稿.docx'
+                ]
+            }
+        };
+
+        function openDocument(docName){
+            showFileInfo(docName);
+        }
+        
+        function showFileInfo(docName){
+            const dialog = document.createElement('div');
+            dialog.style.cssText = `
+                position:fixed;
+                top:0;left:0;right:0;bottom:0;
+                background:rgba(0,0,0,0.8);
+                display:flex;
+                align-items:center;
+                justify-content:center;
+                z-index:10000;
+            `;
+            
+            // 构建文件路径
+            const basePath = 'C:\\Users\\Steve\\Desktop\\日常文件\\大一下（一）';
+            let filePath = basePath;
+            
+            // 尝试找到文件所在的文件夹 - 递归搜索
+            function findFilePath(structure, currentPath) {
+                for (const [name, content] of Object.entries(structure)) {
+                    if (Array.isArray(content)) {
+                        if (content.includes(docName)) {
+                            return `${currentPath}\\${name}\\${docName}`;
+                        }
+                    } else if (typeof content === 'object') {
+                        const found = findFilePath(content, `${currentPath}\\${name}`);
+                        if (found) {
+                            return found;
+                        }
+                    }
+                }
+                return null;
+            }
+            
+            // 搜索文件路径
+            const foundPath = findFilePath(realFileStructure, basePath);
+            if (foundPath) {
+                filePath = foundPath;
+            } else {
+                // 如果没找到，尝试直接在原文件夹中查找
+                const originalFolders = ['人工智能数学思维课件', '人工智能的数学思维', '数据结构与算法', '离散数学', '计算机系统'];
+                for (const folder of originalFolders) {
+                    const possiblePath = `${basePath}\\${folder}\\${docName}`;
+                    // 这里我们假设文件存在
+                    filePath = possiblePath;
+                    break;
+                }
+            }
+            
+            // 构建文件URL
+            const fileUrl = `file:///${filePath.replace(/\\/g, '/')}`;
+            
+            dialog.innerHTML = `
+                <div style="background:linear-gradient(180deg,rgba(15,25,45,0.98),rgba(10,18,32,0.99));
+                    border:1px solid rgba(80,120,180,0.4);
+                    border-radius:3px;
+                    padding:24px;
+                    max-width:600px;
+                    width:90%;
+                ">
+                    <h3 style="color:#c8d8e8;margin-bottom:16px;">文件信息</h3>
+                    <p style="color:#a0c0e0;margin-bottom:12px;"><strong>文件名:</strong> ${docName}</p>
+                    <p style="color:#a0c0e0;margin-bottom:12px;"><strong>文件路径:</strong> <span id="filePath">${filePath}</span></p>
+                    <div style="margin-bottom:16px;">
+                        <strong style="color:#c8d8e8;display:block;margin-bottom:8px;">直接访问链接:</strong>
+                        <a href="${fileUrl}" target="_blank" style="color:#60a0f0;text-decoration:underline;">${fileUrl}</a>
+                        <p style="color:#a0c0e0;font-size:12px;margin-top:4px;">点击上面的链接直接打开文件</p>
+                    </div>
+                    <div style="display:flex;gap:8px;margin-bottom:16px;">
+                        <button onclick="copyFilePath('${filePath}')" 
+                            style="padding:6px 12px;background:linear-gradient(180deg,rgba(40,80,140,0.7),rgba(20,50,100,0.8));
+                            border:1px solid rgba(100,140,200,0.4);
+                            color:#d0e0f0;
+                            border-radius:2px;
+                            cursor:pointer;
+                            font-size:12px;">
+                            复制路径
+                        </button>
+                        <button onclick="tryOpenFile('${filePath}')" 
+                            style="padding:6px 12px;background:linear-gradient(180deg,rgba(60,140,220,0.85),rgba(30,90,170,0.9));
+                            border:1px solid rgba(100,170,240,0.7);
+                            color:#d0e0f0;
+                            border-radius:2px;
+                            cursor:pointer;
+                            font-size:12px;">
+                            尝试打开
+                        </button>
+                    </div>
+                    <div style="background:rgba(10,30,60,0.3);padding:12px;border-radius:2px;margin-bottom:16px;">
+                        <p style="color:#a0c0e0;font-size:13px;"><strong>打开指南:</strong></p>
+                        <ol style="color:#a0c0e0;font-size:12px;margin:8px 0 0 20px;">
+                            <li>点击上面的直接访问链接</li>
+                            <li>如果浏览器阻止，复制文件路径</li>
+                            <li>打开文件资源管理器</li>
+                            <li>在地址栏粘贴路径并按 Enter</li>
+                        </ol>
+                    </div>
+                    <div style="display:flex;gap:12px;justify-content:flex-end;">
+                        <button onclick="this.parentElement.parentElement.parentElement.remove()" 
+                            style="padding:8px 16px;background:linear-gradient(180deg,rgba(40,80,140,0.7),rgba(20,50,100,0.8));
+                            border:1px solid rgba(100,140,200,0.4);
+                            color:#d0e0f0;
+                            border-radius:2px;
+                            cursor:pointer;">
+                            关闭
+                        </button>
+                    </div>
+                </div>
+            `;
+            
+            document.body.appendChild(dialog);
+        }
+        
+        function copyFilePath(filePath){
+            navigator.clipboard.writeText(filePath).then(() => {
+                alert('文件路径已复制到剪贴板');
+            }).catch(err => {
+                console.error('复制失败:', err);
+                alert('复制失败，请手动复制');
+            });
+        }
+        
+        function tryOpenFile(filePath){
+            try {
+                // 尝试使用 window.open 打开本地文件
+                // 注意：现代浏览器通常会阻止这种操作
+                const url = `file:///${filePath.replace(/\\/g, '/')}`;
+                window.open(url);
+                alert('正在尝试打开文件...\n\n如果没有反应，请按照打开指南操作');
+            } catch (error) {
+                console.error('打开文件失败:', error);
+                alert('无法直接打开文件，请按照打开指南操作');
+            }
+        }
+        
+        // 测试链接生成函数
+        function testFileLinks(){
+            console.log('测试文件链接生成...');
+            
+            // 测试几个关键文件
+            const testFiles = [
+                '1人工智能的数学思维-课程概述v2025.pdf',
+                '数据结构电子书.pdf',
+                'Ch1.1-1.3.ppt',
+                '0.课程简介.pdf'
+            ];
+            
+            testFiles.forEach(file => {
+                const basePath = 'C:\\Users\\Steve\\Desktop\\日常文件\\大一下（一）';
+                
+                function findFilePath(struct, currentPath) {
+                    for (const [n, c] of Object.entries(struct)) {
+                        if (Array.isArray(c)) {
+                            if (c.includes(file)) {
+                                return currentPath + '\\' + n + '\\' + file;
+                            }
+                        } else if (typeof c === 'object') {
+                            const found = findFilePath(c, currentPath + '\\' + n);
+                            if (found) return found;
+                        }
+                    }
+                    return null;
+                }
+                
+                const foundPath = findFilePath(realFileStructure, basePath);
+                const cleanedPath = foundPath ? foundPath.replace(/\\/g, '/') : '';
+                const fileUrl = foundPath ? `file:///${cleanedPath}` : '';
+                
+                console.log(`文件: ${file}`);
+                console.log(`路径: ${foundPath}`);
+                console.log(`链接: ${fileUrl}`);
+                console.log('---');
+            });
+            
+            alert('链接测试完成，请查看控制台输出');
+        }
+        
+        // 页面加载时加载课程详情
+        window.onload = function() {
+            loadCourseDetails();
+            // 注释掉自动测试，需要时手动调用
+            // testFileLinks();
+        };
+    </script>
+</body>
+</html>

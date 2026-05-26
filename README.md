@@ -1,5 +1,4 @@
-[README.md](https://github.com/user-attachments/files/28263980/README.md)
-# learning_assistant.gith# 🧠 个性化学习助手
+# 🧠 个性化学习助手
 
 Personalized Learning Assistant - 为你的学习之路保驾护航
 
@@ -150,4 +149,4 @@ MIT License
 
 ## 📧 联系方式
 
-GitHub: [@king157419](https://github.com/king157419)ub.io
+GitHub: [@king157419](https://github.com/king157419)

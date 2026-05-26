@@ -1,0 +1,702 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>个性化学习助手</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Microsoft YaHei', 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .header {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 20px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+
+        .header h1 {
+            color: #333;
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            color: #666;
+            font-size: 1.1em;
+        }
+
+        .main-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .card {
+            background: white;
+            border-radius: 20px;
+            padding: 25px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+        }
+
+        .card h2 {
+            color: #333;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #667eea;
+        }
+
+        .course-list {
+            list-style: none;
+        }
+
+        .course-item {
+            padding: 15px;
+            margin-bottom: 10px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .course-item:hover {
+            background: #667eea;
+            color: white;
+            transform: translateX(5px);
+        }
+
+        .btn {
+            padding: 12px 30px;
+            border: none;
+            border-radius: 25px;
+            font-size: 1em;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin: 5px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-secondary {
+            background: #f8f9fa;
+            color: #333;
+        }
+
+        .btn-secondary:hover {
+            background: #e9ecef;
+        }
+
+        .profile-section {
+            margin-bottom: 20px;
+        }
+
+        .profile-dimension {
+            display: flex;
+            align-items: center;
+            margin: 10px 0;
+        }
+
+        .dimension-label {
+            width: 100px;
+            font-weight: 500;
+        }
+
+        .dimension-bar {
+            flex: 1;
+            height: 20px;
+            background: #e9ecef;
+            border-radius: 10px;
+            overflow: hidden;
+            margin: 0 10px;
+        }
+
+        .dimension-fill {
+            height: 100%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            transition: width 0.5s;
+        }
+
+        .dimension-value {
+            width: 50px;
+            text-align: right;
+        }
+
+        .assessment-form {
+            margin-top: 20px;
+        }
+
+        .question {
+            margin-bottom: 25px;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 15px;
+        }
+
+        .question h4 {
+            margin-bottom: 15px;
+            color: #333;
+        }
+
+        .option {
+            padding: 10px 15px;
+            margin: 8px 0;
+            background: white;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: 2px solid transparent;
+        }
+
+        .option:hover {
+            border-color: #667eea;
+        }
+
+        .option.selected {
+            border-color: #667eea;
+            background: #667eea;
+            color: white;
+        }
+
+        .learning-panel {
+            display: none;
+        }
+
+        .activity-card {
+            padding: 25px;
+            background: #f8f9fa;
+            border-radius: 15px;
+            margin-bottom: 20px;
+        }
+
+        .activity-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .activity-content {
+            line-height: 1.8;
+            color: #333;
+        }
+
+        .feedback-box {
+            padding: 20px;
+            border-radius: 15px;
+            margin-top: 20px;
+        }
+
+        .feedback-success {
+            background: #d4edda;
+            border: 1px solid #c3e6cb;
+            color: #155724;
+        }
+
+        .feedback-error {
+            background: #f8d7da;
+            border: 1px solid #f5c6cb;
+            color: #721c24;
+        }
+
+        .progress-bar {
+            height: 30px;
+            background: #e9ecef;
+            border-radius: 15px;
+            overflow: hidden;
+            margin: 15px 0;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            transition: width 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .recommendation-list {
+            list-style: none;
+        }
+
+        .recommendation-item {
+            padding: 12px;
+            margin: 8px 0;
+            background: #f8f9fa;
+            border-radius: 10px;
+            border-left: 4px solid #667eea;
+        }
+
+        .topic-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin: 10px 0;
+        }
+
+        .topic-tag {
+            padding: 6px 15px;
+            background: #667eea;
+            color: white;
+            border-radius: 20px;
+            font-size: 0.9em;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .topic-tag:hover {
+            background: #764ba2;
+        }
+
+        .topic-tag.selected {
+            background: #28a745;
+        }
+
+        @media (max-width: 768px) {
+            .main-content {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🎓 个性化学习助手</h1>
+            <p>AI驱动的自适应学习系统，为您量身定制学习体验</p>
+        </div>
+
+        <div class="main-content">
+            <div class="card">
+                <div id="profile-section">
+                    <h2>👤 学习者档案</h2>
+
+                    <div id="profile-form" class="hidden">
+                        <div class="form-group">
+                            <label>姓名:</label>
+                            <input type="text" id="student-name" class="form-control" placeholder="请输入姓名">
+                        </div>
+                        <div class="form-group">
+                            <label>学号:</label>
+                            <input type="text" id="student-id" class="form-control" placeholder="请输入学号">
+                        </div>
+                        <button class="btn btn-primary" onclick="createProfile()">创建档案</button>
+                    </div>
+
+                    <div id="profile-display" class="hidden">
+                        <div class="profile-section">
+                            <p><strong>学生:</strong> <span id="display-name"></span></p>
+                            <p><strong>学号:</strong> <span id="display-id"></span></p>
+                        </div>
+                        <div id="dimension-chart"></div>
+                        <button class="btn btn-secondary" onclick="showAssessment()">重新评估</button>
+                    </div>
+
+                    <div id="no-profile">
+                        <p>还没有创建学习档案</p>
+                        <button class="btn btn-primary" onclick="showProfileForm()">创建档案</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <h2>📚 课程中心</h2>
+                <ul class="course-list" id="course-list"></ul>
+            </div>
+
+            <div class="card">
+                <h2>📊 学习分析</h2>
+                <div id="analytics-content">
+                    <p>完成学习后，这里将显示您的学习分析报告</p>
+                </div>
+                <button class="btn btn-primary" onclick="loadAnalytics()">查看分析</button>
+            </div>
+
+            <div class="card">
+                <h2>💡 学习推荐</h2>
+                <ul class="recommendation-list" id="recommendation-list">
+                    <li class="recommendation-item">完成学习风格评估后获取个性化推荐</li>
+                </ul>
+                <button class="btn btn-primary" onclick="loadRecommendations()">获取推荐</button>
+            </div>
+        </div>
+
+        <div class="card" style="margin-top: 20px;">
+            <div id="assessment-section" class="hidden">
+                <h2>📋 学习风格评估</h2>
+                <p>回答以下问题，帮助我们了解您的学习风格...</p>
+                <div id="assessment-questions"></div>
+                <button class="btn btn-primary" onclick="submitAssessment()">提交评估</button>
+            </div>
+        </div>
+
+        <div class="card learning-panel" id="learning-panel">
+            <h2>📖 学习活动</h2>
+            <div class="progress-bar">
+                <div class="progress-fill" id="progress-fill" style="width: 0%;">0%</div>
+            </div>
+            <div id="current-activity"></div>
+            <div id="activity-feedback" class="hidden"></div>
+            <div style="margin-top: 20px;">
+                <button class="btn btn-primary" onclick="completeActivity()">完成活动</button>
+                <button class="btn btn-secondary" onclick="generateExercises()">生成练习</button>
+                <button class="btn btn-secondary" onclick="getExplanation()">详细讲解</button>
+                <button class="btn btn-secondary" onclick="endLearning()">结束学习</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentProfile = null;
+        let currentActivities = [];
+        let currentActivityIndex = 0;
+        let selectedCourse = null;
+
+        async function init() {
+            const response = await fetch('/');
+            loadCourses();
+        }
+
+        async function loadCourses() {
+            const response = await fetch('/api/course/topics?course_id=ai_math_thinking');
+            const data = await response.json();
+
+            fetch('/api/profile/create', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({name: 'Guest', student_id: 'guest_001'})
+            }).then(() => {
+                showProfileDisplay('Guest', 'guest_001');
+                loadCoursesList();
+            });
+        }
+
+        async function loadCoursesList() {
+            const response = await fetch('/');
+            const courses = [
+                {course_id: 'ai_math_thinking', title: '人工智能的数学思维', topics: ['人工智能概述', '机器学习基础', '神经网络']},
+                {course_id: 'data_structures', title: '数据结构与算法', topics: ['栈和队列', '链表', '树结构']},
+                {course_id: 'discrete_math', title: '离散数学', topics: ['集合论', '图论', '命题逻辑']},
+                {course_id: 'computer_systems', title: '计算机系统', topics: ['信息表示', '浮点数', '机器指令']}
+            ];
+
+            const list = document.getElementById('course-list');
+            list.innerHTML = courses.map(c => `
+                <li class="course-item" onclick="selectCourse('${c.course_id}', '${c.title}', ${JSON.stringify(c.topics).replace(/"/g, '&quot;')})">
+                    <strong>${c.title}</strong>
+                    <div class="topic-tags">
+                        ${c.topics.map(t => `<span class="topic-tag">${t}</span>`).join('')}
+                    </div>
+                </li>
+            `).join('');
+        }
+
+        function showProfileForm() {
+            document.getElementById('profile-form').classList.remove('hidden');
+            document.getElementById('profile-display').classList.add('hidden');
+            document.getElementById('no-profile').classList.add('hidden');
+        }
+
+        function showProfileDisplay(name, id) {
+            document.getElementById('profile-form').classList.add('hidden');
+            document.getElementById('profile-display').classList.remove('hidden');
+            document.getElementById('no-profile').classList.add('hidden');
+            document.getElementById('display-name').textContent = name;
+            document.getElementById('display-id').textContent = id;
+        }
+
+        async function createProfile() {
+            const name = document.getElementById('student-name').value;
+            const id = document.getElementById('student-id').value;
+
+            const response = await fetch('/api/profile/create', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({name, student_id: id})
+            });
+
+            const data = await response.json();
+            if (data.success) {
+                showProfileDisplay(name, id);
+                alert(data.message);
+            }
+        }
+
+        async function showAssessment() {
+            document.getElementById('assessment-section').classList.remove('hidden');
+
+            const response = await fetch('/api/assessment/questions');
+            const data = await response.json();
+
+            const container = document.getElementById('assessment-questions');
+            container.innerHTML = data.questions.map((q, i) => `
+                <div class="question" id="q-${q.id}">
+                    <h4>问题 ${i + 1}: ${q.question}</h4>
+                    ${q.options.map((opt, j) => `
+                        <div class="option" onclick="selectOption('${q.id}', ${j}, this)">${opt.text}</div>
+                    `).join('')}
+                </div>
+            `).join('');
+        }
+
+        function selectOption(questionId, optionIndex, element) {
+            const options = document.querySelectorAll(`#q-${questionId} .option`);
+            options.forEach(opt => opt.classList.remove('selected'));
+            element.classList.add('selected');
+            element.dataset.selected = optionIndex;
+        }
+
+        async function submitAssessment() {
+            const questions = document.querySelectorAll('.question');
+            const responses = [];
+
+            questions.forEach(q => {
+                const selected = q.querySelector('.option.selected');
+                if (selected) {
+                    responses.push({
+                        question_id: q.id.replace('q-', ''),
+                        selected_option: parseInt(selected.dataset.selected)
+                    });
+                }
+            });
+
+            if (responses.length < questions.length) {
+                alert('请回答所有问题');
+                return;
+            }
+
+            const response = await fetch('/api/assessment/submit', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({responses})
+            });
+
+            const data = await response.json();
+            if (data.success) {
+                currentProfile = data.profile;
+                displayProfileResults(data.profile);
+                document.getElementById('assessment-section').classList.add('hidden');
+            }
+        }
+
+        function displayProfileResults(profile) {
+            const container = document.getElementById('dimension-chart');
+            const dimensions = [
+                {label: '视觉型', value: profile.visual_score},
+                {label: '语言型', value: profile.verbal_score},
+                {label: '逻辑型', value: profile.logical_score},
+                {label: '实践型', value: profile.practical_score},
+                {label: '社交型', value: profile.social_score},
+                {label: '自主型', value: profile.solitary_score}
+            ];
+
+            container.innerHTML = `
+                <p><strong>主导风格:</strong> ${profile.dominant_dimension}</p>
+                ${dimensions.map(d => `
+                    <div class="profile-dimension">
+                        <span class="dimension-label">${d.label}</span>
+                        <div class="dimension-bar">
+                            <div class="dimension-fill" style="width: ${d.value * 100}%"></div>
+                        </div>
+                        <span class="dimension-value">${(d.value * 100).toFixed(0)}%</span>
+                    </div>
+                `).join('')}
+            `;
+
+            const prefs = document.getElementById('recommendation-list');
+            prefs.innerHTML = profile.preferences.map(p => `<li class="recommendation-item">${p}</li>`).join('');
+        }
+
+        function selectCourse(courseId, courseTitle, topics) {
+            selectedCourse = {courseId, courseTitle, topics};
+            alert(`已选择课程: ${courseTitle}\n选择要学习的主题开始学习`);
+        }
+
+        async function startLearning() {
+            if (!selectedCourse) {
+                alert('请先选择一门课程');
+                return;
+            }
+
+            const response = await fetch('/api/learning/start', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({
+                    course_id: selectedCourse.courseId,
+                    topics: selectedCourse.topics
+                })
+            });
+
+            const data = await response.json();
+            if (data.success) {
+                currentActivities = data.activities;
+                currentActivityIndex = 0;
+                document.getElementById('learning-panel').style.display = 'block';
+                displayCurrentActivity();
+            }
+        }
+
+        function displayCurrentActivity() {
+            if (currentActivityIndex >= currentActivities.length) {
+                document.getElementById('current-activity').innerHTML = '<p>所有学习活动已完成！</p>';
+                return;
+            }
+
+            const activity = currentActivities[currentActivityIndex];
+            const container = document.getElementById('current-activity');
+
+            container.innerHTML = `
+                <div class="activity-card">
+                    <div class="activity-header">
+                        <h3>${activity.title}</h3>
+                        <span>⏱️ ${activity.time}分钟</span>
+                    </div>
+                    <div class="activity-content">
+                        ${activity.content.substring(0, 500)}...
+                    </div>
+                </div>
+            `;
+
+            const progress = ((currentActivityIndex) / currentActivities.length) * 100;
+            document.getElementById('progress-fill').style.width = `${progress}%`;
+            document.getElementById('progress-fill').textContent = `${Math.round(progress)}%`;
+        }
+
+        async function completeActivity() {
+            const response = await fetch('/api/activity/submit', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({
+                    completed: true,
+                    correct_answers: 1,
+                    total_questions: 1
+                })
+            });
+
+            const data = await response.json();
+            displayFeedback(data);
+
+            currentActivityIndex++;
+            displayCurrentActivity();
+        }
+
+        function displayFeedback(data) {
+            const container = document.getElementById('activity-feedback');
+            container.classList.remove('hidden');
+
+            const feedbackClass = data.performance >= 0.6 ? 'feedback-success' : 'feedback-error';
+            container.className = `feedback-box ${feedbackClass}`;
+            container.innerHTML = `
+                <h4>📊 表现评估: ${(data.performance * 100).toFixed(0)}%</h4>
+                <p>${data.feedback}</p>
+            `;
+
+            setTimeout(() => {
+                container.classList.add('hidden');
+            }, 3000);
+        }
+
+        async function generateExercises() {
+            if (currentActivityIndex < currentActivities.length) {
+                const topic = currentActivities[currentActivityIndex].title;
+                const response = await fetch('/api/exercises/generate', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({topic, difficulty: 0.5})
+                });
+
+                const data = await response.json();
+                alert(`已生成${data.exercises.length}道练习题`);
+            }
+        }
+
+        async function getExplanation() {
+            if (currentActivityIndex < currentActivities.length) {
+                const activity = currentActivities[currentActivityIndex];
+                const response = await fetch('/api/explanation/generate', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({
+                        topic: activity.title,
+                        concept: activity.title,
+                        depth: 'high'
+                    })
+                });
+
+                const data = await response.json();
+                alert('详细讲解已生成');
+            }
+        }
+
+        async function endLearning() {
+            const response = await fetch('/api/session/end', {
+                method: 'POST'
+            });
+
+            const data = await response.json();
+            document.getElementById('learning-panel').style.display = 'none';
+            alert('学习会话已结束');
+            loadAnalytics();
+        }
+
+        async function loadAnalytics() {
+            const response = await fetch('/api/analytics');
+            const data = await response.json();
+
+            const container = document.getElementById('analytics-content');
+            if (data.total_sessions && data.total_sessions > 0) {
+                container.innerHTML = `
+                    <p>📚 总学习时长: ${data.total_time_minutes} 分钟</p>
+                    <p>📈 平均表现: ${data.average_performance}%</p>
+                    <p>⚡ 学习效率: ${data.learning_efficiency}%</p>
+                `;
+            } else {
+                container.innerHTML = '<p>暂无学习数据</p>';
+            }
+        }
+
+        async function loadRecommendations() {
+            const response = await fetch('/api/recommendations');
+            const data = await response.json();
+
+            const list = document.getElementById('recommendation-list');
+            if (data.recommendations && data.recommendations.length > 0) {
+                list.innerHTML = data.recommendations.map(r => `<li class="recommendation-item">${r}</li>`).join('');
+            }
+        }
+
+        init();
+    </script>
+</body>
+</html>
