@@ -1,1 +1,153 @@
-# learning_assistant.github.io
+[README.md](https://github.com/user-attachments/files/28263980/README.md)
+# learning_assistant.gith# 🧠 个性化学习助手
+
+Personalized Learning Assistant - 为你的学习之路保驾护航
+
+## 🌟 项目简介
+
+这是一个基于 Web 的个性化学习助手，集成了机器学习算法可视化、AI智能辅导、知识图谱等功能，帮助用户更高效地学习。
+
+## 🎯 核心功能
+
+### 📚 学习管理
+- **课程中心**：丰富的课程资源，支持拖拽管理学习计划
+- **学习计划表**：自定义学习路径，灵活安排学习内容
+- **练习题册**：精选典型题目，详细解析，个性化学习建议
+
+### 🤖 AI智能辅导
+- **智能问答**：知识库问答，自然语言交互
+- **个性化推荐**：基于学习风格提供定制化学习路径
+- **学习分析**：实时追踪学习进度和效率
+
+### 🧠 知识图谱
+- **算法可视化**：12种经典机器学习算法详解
+- **分级学习**：从Lv1到Lv5，循序渐进
+- **费曼学习法**：思考题引导，加深理解
+
+### 📊 数据可视化
+- **学习统计**：今日学习时长、连续学习天数
+- **效率分析**：日均时长、正确率、专注度
+- **趋势图表**：周学习趋势可视化
+
+### ⭐ 游戏化学习
+- **等级系统**：12个等级，逐步升级
+- **成就徽章**：10种成就，激励学习
+- **积分系统**：学习积分累计
+
+### 💾 数据安全
+- **自动保存**：实时保存学习数据
+- **加密存储**：本地数据加密保护
+- **数据导出**：一键备份和恢复
+
+## 🛠️ 技术栈
+
+- **前端**：HTML5 + CSS3 + JavaScript (ES6+)
+- **后端**：Python + Flask
+- **数据存储**：LocalStorage (加密)
+- **图标**：Unicode Emoji
+
+## 🚀 快速开始
+
+### 方法一：直接访问（推荐）
+
+打开浏览器访问：
+```
+https://king157419.github.io/easyML/
+```
+
+### 方法二：本地运行
+
+1. 克隆仓库：
+```bash
+git clone https://github.com/king157419/easyML.git
+cd easyML
+```
+
+2. 启动开发服务器：
+```bash
+python -m http.server 8000
+```
+
+3. 打开浏览器访问：
+```
+http://localhost:8000
+```
+
+### 方法三：完整部署
+
+1. 安装依赖：
+```bash
+pip install flask flask-cors
+```
+
+2. 启动Flask服务：
+```bash
+python web_app.py
+```
+
+3. 打开浏览器访问：
+```
+http://localhost:5000
+```
+
+## 📁 项目结构
+
+```
+.
+├── index.html                    # 首页入口
+├── 明日方舟学习终端.html          # 主学习界面
+├── course_details.html           # 课程详情页
+├── web_app.py                    # Flask后端API
+├── README.md                     # 项目文档
+├── design_doc.md                 # 设计文档
+├── core/                         # 核心引擎
+│   ├── learning_assistant.py     # 学习助手核心
+│   └── learning_style_analyzer.py # 学习风格分析器
+├── models/                       # 数据模型
+│   └── data_models.py            # 数据模型定义
+└── tests/                        # 测试文件
+    ├── test_api.py               # API单元测试
+    └── test_integration.py       # 集成测试
+```
+
+## 📚 课程内容
+
+| 课程 | 主题 | 难度 |
+|------|------|------|
+| 人工智能数学思维 | 机器学习、神经网络、矩阵运算 | Lv1-Lv4 |
+| 数据结构与算法 | 栈队列、二叉树、排序算法 | Lv1-Lv3 |
+| 离散数学 | 命题逻辑、组合数学、图论 | Lv1-Lv2 |
+| 计算机系统 | 信息表示、内存层次、浮点数 | Lv1-Lv3 |
+| 算法设计与分析 | 动态规划、贪心算法、复杂度 | Lv2-Lv5 |
+
+## 🧠 算法知识图谱
+
+| 类别 | 算法 | 等级 |
+|------|------|------|
+| 回归 | 线性回归、Ridge、Lasso | Lv1-Lv2 |
+| 分类 | 逻辑回归、KNN、SVM、决策树 | Lv1-Lv3 |
+| 聚类 | K-Means、DBSCAN、层次聚类 | Lv1-Lv2 |
+| 降维 | PCA、LDA、t-SNE | Lv2 |
+| 神经网络 | CNN、RNN、Attention、Transformer | Lv4 |
+| 强化学习 | Q-Learning、策略梯度、Actor-Critic | Lv5 |
+
+## 📈 学习原则
+
+遵循**费曼学习法**：
+1. 用简单的语言解释复杂概念
+2. 拆分知识点到最基础
+3. 拒绝知识诅咒，不假设任何背景知识
+4. 用提问引导学习
+5. 类比优先，视觉化展示
+
+## 🤝 贡献
+
+欢迎提出改进建议！
+
+## 📄 许可证
+
+MIT License
+
+## 📧 联系方式
+
+GitHub: [@king157419](https://github.com/king157419)ub.io
